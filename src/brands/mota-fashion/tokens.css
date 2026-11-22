@@ -1,0 +1,43 @@
+:root[data-brand='mota-fashion'] {
+  /* Paleta tirada da logo da Mota Fashion: aquarela rosa-lilás sobre
+     branco, com contorno e letras quase pretos. O magenta mais vivo da
+     aquarela (#d845c1) não tem contraste para texto, então vira
+     --color-accent-soft; o --color-accent é a versão escurecida dele.
+     Pares texto/fundo checados para contraste AA. */
+  --color-bg: #f8e0f0;
+  --color-bg-alt: #fdf3f9;
+  --color-surface: #f0c8e0;
+  --color-text: #1f1a1d;
+  --color-text-muted: #5e4a57;
+  --color-accent: #a3247f;
+  --color-accent-soft: #d845c1;
+  --color-win: #2f6b40;
+  --color-lose: #b0283f;
+  --color-danger-text: #a3203a;
+
+  /* Roleta: magenta escuro + rosa da aquarela alternados. */
+  --color-wine: #7a1a5e;
+  --color-wine-deep: #5a1246;
+  --color-wine-text: #fdf3f9;
+  --color-bulb-highlight: #fff0fa;
+  --color-bulb-glow: rgba(216, 69, 193, 0.6);
+
+  --font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+  /* Open Sans Condensed Light: a sans fina e estreita da logo. */
+  --font-family-display: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+}
+
+/* A logo usa a fonte em caixa alta, fina e com letras espaçadas. */
+:root[data-brand='mota-fashion'] .font-display {
+  font-stretch: 75%;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  /* O letter-spacing também entra depois da última letra; compensa à esquerda para o texto centralizar. */
+  padding-left: 0.08em;
+  text-transform: uppercase;
+}
+
+/* O título principal (nome da marca) precisa de mais peso para ser lido de longe na TV. */
+:root[data-brand='mota-fashion'] h1.font-display {
+  font-weight: 600;
+}

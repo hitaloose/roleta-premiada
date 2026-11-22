@@ -1,0 +1,30 @@
+{
+  "name": "roleta-premiada",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start-nr": "vite --mode notas-raras --open",
+    "start-mf": "vite --mode mota-fashion --open",
+    "event-nr": "tsc -b && vite build --mode notas-raras && vite preview --open",
+    "event-mf": "tsc -b && vite build --mode mota-fashion && vite preview --open",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  }
+}

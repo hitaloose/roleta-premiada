@@ -1,0 +1,27 @@
+:root[data-brand='notas-raras'] {
+  /* Paleta inspirada na Notas Raras (notasraras.com.br): dourado, marfim
+     e terracota em tons pastel claros, referência à perfumaria árabe.
+     Todos os pares texto/fundo abaixo foram checados para contraste
+     AA (>=4.5:1 em texto normal, >=3:1 em texto grande). */
+  --color-bg: #f5ead8;
+  --color-bg-alt: #fbf3e6;
+  --color-surface: #efe0bf;
+  --color-text: #3b2a17;
+  --color-text-muted: #6b573c;
+  --color-accent: #8f631a;
+  --color-accent-soft: #c9a464;
+  --color-win: #2f6b40;
+  --color-lose: #c0392b;
+  --color-danger-text: #a83f2b;
+
+  /* Roleta: duas cores alternadas (vinho + marfim), aro e luzes de camarim. */
+  --color-wine: #6d1b32;
+  --color-wine-deep: #4a1224;
+  --color-wine-text: #f7ecd6;
+  --color-bulb-highlight: #fff8e0;
+  --color-bulb-glow: rgba(212, 175, 55, 0.7);
+
+  --font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  /* Fonte de destaque com estética árabe (caligrafia), usada nos títulos. */
+  --font-family-display: 'Rakkas', 'Segoe UI', cursive;
+}
