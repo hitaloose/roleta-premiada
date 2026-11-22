@@ -10,10 +10,13 @@ A tela sempre abre na aba **Geral**. Assim dá para entrar no meio do evento sem
 
 | Aba                 | O que tem                                                                                                                                         |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Geral**           | Tema (Notas Raras / Mota Fashion), validação de CPF ligada/desligada, troca do PIN                                                                  |
+| **Geral**           | Tema, orientação da tela, coleta de dados, sons, chamada piscante, validação de CPF, troca do PIN                                                   |
 | **Participantes**   | Contadores, lista de quem já rodou, **Exportar CSV**, **Importar CSV**, **Zerar dados**                                                            |
 | **Itens da roleta** | Texto, tipo e peso de cada fatia, com a % de chance calculada. Salvo por tema; "Restaurar padrão do tema" volta para `src/brands/<marca>/prizes.ts` |
 
+- **Coleta de dados desligada** (modo rápido): ENTER ou ESPAÇO na tela inicial já gira a roleta e mostra o prêmio. Nada é pedido nem salvo.
+- **Sons**: o som do giro é sorteado a cada rodada entre 4 opções (clássico, cassino, eletrônico, tambor), com o tic acompanhando as fatias. Prêmio, super prêmio e falha têm sons próprios. Todos são sintetizados no navegador. Para trocar um deles por um arquivo, coloque um mp3 em `public/sounds/` com o nome `win`, `super-win`, `lose`, `spin-classico`, `spin-cassino`, `spin-eletronico` ou `spin-tambor`. O `win.mp3` que já existe substitui o som de prêmio sintetizado; apague-o para usar o sintetizado.
+- **Chamada na tela inicial**: título grande e subtítulo piscando no centro da tela, por cima da roleta (ex.: "Girou, ganhou!" / "Participe grátis").
 - **Validação de CPF desligada**: o CPF continua sendo pedido, mas qualquer número é aceito e pode repetir.
 - **Zerar dados** pede para digitar `ZERAR` e oferece "Exportar e zerar". Não dá para desfazer.
 - Tudo (configuração e participantes) fica no `localStorage` **do navegador e do endereço** em uso. `localhost:4173` e o GitHub Pages têm dados separados. Para levar dados de um para o outro, exporte o CSV de um e importe no outro.
@@ -57,7 +60,16 @@ Além dos botões da aba Participantes, existem atalhos ocultos que funcionam em
 - `npm run event`: build + servidor local em `http://localhost:4173`. No Windows, o `iniciar-evento.bat` faz isso e abre o Chrome em modo kiosk.
 - `npm test`: testes.
 
-O site no GitHub Pages precisa de internet para abrir. Em evento sem internet, use o modo local acima.
+O site no GitHub Pages precisa de internet para abrir. Em evento sem internet, use o modo local acima ou o app desktop.
+
+## App desktop offline (Tauri)
+
+Um app que abre direto em tela cheia, sem Chrome, servidor ou internet. As fontes, os sons e as imagens vão dentro do app.
+
+- **Instalador do Windows**: no GitHub, abra Actions → "App desktop (Windows)" → Run workflow (ou crie uma tag `v*`). Quando terminar, baixe o artefato `roleta-premiada-windows`. Ele traz o instalador (`*-setup.exe`) e o `.exe` solto. O Windows 10/11 já vem com o WebView2, que o app usa.
+- **No Mac, para testar**: `npm run desktop:dev`. Precisa do Rust 1.90 ou mais novo.
+- Para sair da tela cheia use `Alt+F4` (Windows) ou `Cmd+Q` (Mac).
+- Os dados (config e participantes) ficam no armazenamento do próprio app, separados do Chrome e do GitHub Pages. Para levar dados de um para o outro, use exportar/importar CSV.
 
 ## Deploy (GitHub Pages)
 

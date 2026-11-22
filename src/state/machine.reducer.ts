@@ -33,6 +33,16 @@ export function machineReducer(state: AppState, event: AppEvent): AppState {
         lastLoseMessage: state.lastLoseMessage,
       };
 
+    case 'QUICK_SPIN':
+      if (state.status !== 'idle') return state;
+      return {
+        status: 'spinning',
+        entrant: null,
+        prize: event.prize,
+        prizeIndex: event.prizeIndex,
+        lastLoseMessage: state.lastLoseMessage,
+      };
+
     case 'CANCEL_FORM':
       if (state.status !== 'form') return state;
       return { status: 'idle', lastLoseMessage: state.lastLoseMessage };

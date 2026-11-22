@@ -11,7 +11,7 @@ export function StaffNotice({ tone, children }: { tone: StaffNoticeTone; childre
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 10,
-        maxWidth: '90vw',
+        maxWidth: '90cqw',
         padding: 'var(--space-sm) var(--space-md)',
         borderRadius: '12px',
         fontSize: 'var(--font-body)',

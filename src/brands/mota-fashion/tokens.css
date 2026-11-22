@@ -22,9 +22,9 @@
   --color-bulb-highlight: #fff0fa;
   --color-bulb-glow: rgba(216, 69, 193, 0.6);
 
-  --font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+  --font-family: 'Open Sans Variable', 'Open Sans', 'Segoe UI', Arial, sans-serif;
   /* Open Sans Condensed Light: a sans fina e estreita da logo. */
-  --font-family-display: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+  --font-family-display: 'Open Sans Variable', 'Open Sans', 'Segoe UI', Arial, sans-serif;
 }
 
 /* A logo usa a fonte em caixa alta, fina e com letras espaçadas. */

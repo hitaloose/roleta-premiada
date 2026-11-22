@@ -7,8 +7,8 @@ export function KioskLayout({ children }: { children: ReactNode }) {
     <div
       style={{
         position: 'relative',
-        width: '100vw',
-        height: '100vh',
+        width: '100cqw',
+        height: '100cqh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

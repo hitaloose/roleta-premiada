@@ -9,7 +9,7 @@ import { useConfig } from '../../state/ConfigContext';
  * lista de últimos ganhadores (WinnersTicker) está oculta neste layout.
  */
 export function IdleScreen() {
-  const { brand, prizes } = useConfig();
+  const { brand, prizes, config } = useConfig();
   return (
     <>
       <WheelStage
@@ -18,7 +18,7 @@ export function IdleScreen() {
             {brand.name}
           </h1>
         }
-        footer={<KeyHint>Aperte ESPAÇO para começar</KeyHint>}
+        footer={<KeyHint>{config.collectData ? 'Aperte ESPAÇO para começar' : 'Aperte ENTER para girar'}</KeyHint>}
       >
         {(size) => <PrizeWheel prizes={prizes} mode="idle" size={size} />}
       </WheelStage>

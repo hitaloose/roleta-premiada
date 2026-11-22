@@ -98,7 +98,7 @@ input {
     opacity: 0.3;
   }
   100% {
-    transform: translateY(-105vh) translateX(20px);
+    transform: translateY(-105cqh) translateX(20px);
     opacity: 0;
   }
 }
@@ -125,5 +125,179 @@ input {
   100% {
     opacity: 0.2;
     filter: brightness(0.6);
+  }
+}
+
+/* ---------- Chamada piscante da tela inicial (AttractOverlay) ---------- */
+
+.attract {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5cqmin;
+  padding: 0 4cqw;
+  pointer-events: none;
+  text-align: center;
+}
+
+/* véu escuro atrás do texto para ler por cima da roleta em qualquer tema */
+.attract::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 60% 32% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 100%);
+}
+
+.attract-title,
+.attract-subtitle {
+  margin: 0;
+  line-height: 1.05;
+  text-wrap: balance;
+  color: #fff;
+  -webkit-text-stroke: 0.1em var(--color-wine-deep);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0.06em 0 var(--color-wine-deep),
+    0 0 0.4em rgba(0, 0, 0, 0.6),
+    0 0 0.8em var(--color-accent);
+  animation: attract-blink 1.2s ease-in-out infinite;
+}
+
+.attract-title {
+  font-size: 14cqmin;
+  text-transform: uppercase;
+  color: #ffd84d;
+}
+
+.attract-subtitle {
+  font-size: 6cqmin;
+  animation-delay: 0.6s;
+}
+
+@keyframes attract-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  60%,
+  85% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+}
+
+/* ---------- Super prêmio ---------- */
+
+.super-rays {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 200cqmax;
+  height: 200cqmax;
+  margin: -100cqmax 0 0 -100cqmax;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(rgba(255, 215, 0, 0.28) 0deg 10deg, transparent 10deg 20deg);
+  mask-image: radial-gradient(circle, #000 10%, transparent 45%);
+  animation:
+    super-rays 12s linear infinite,
+    fade-in 0.6s ease-out both;
+}
+
+.super-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: radial-gradient(circle, #fff 0%, #ffd700 45%, transparent 75%);
+  animation: super-flash 0.9s ease-out forwards;
+}
+
+.super-shake {
+  animation: super-shake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.15s both;
+}
+
+.super-title {
+  color: #ffd700;
+  -webkit-text-stroke: 0.04em var(--color-wine-deep);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 0.2em #fff3b0,
+    0 0 0.5em #ffb300,
+    0 0.06em 0 var(--color-wine-deep);
+  animation:
+    super-pop 0.8s cubic-bezier(0.18, 1.6, 0.4, 1) both,
+    super-glow 1s ease-in-out 0.8s infinite;
+}
+
+.super-subtitle {
+  animation: fade-in 0.6s ease-out 0.5s both;
+}
+
+@keyframes super-rays {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes super-flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes super-shake {
+  10%,
+  90% {
+    transform: translate(-0.4cqmin, 0) rotate(-0.5deg);
+  }
+  20%,
+  80% {
+    transform: translate(0.8cqmin, 0.3cqmin) rotate(0.8deg);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate(-1.2cqmin, -0.3cqmin) rotate(-1deg);
+  }
+  40%,
+  60% {
+    transform: translate(1.2cqmin, 0.3cqmin) rotate(1deg);
+  }
+}
+
+@keyframes super-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(-8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes super-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.07);
+    filter: brightness(1.35);
   }
 }

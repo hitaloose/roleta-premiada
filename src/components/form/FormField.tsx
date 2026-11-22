@@ -44,7 +44,7 @@ export function FormField({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)', width: 'min(90vw, 560px)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)', width: 'min(90cqw, 560px)' }}>
       <label style={{ fontSize: 'var(--font-title)', color: 'var(--color-text)' }}>{label}</label>
       <input
         ref={inputRef}

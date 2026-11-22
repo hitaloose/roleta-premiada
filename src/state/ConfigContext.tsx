@@ -3,6 +3,7 @@ import type { Brand } from '../brands/types';
 import type { Prize } from '../types/prize';
 import { BRANDS, DEFAULT_BRAND_ID, applyBrand, getBrand } from '../brands';
 import { loadConfig, saveConfig, type AppConfig } from '../config/appConfig';
+import { setSoundEnabled } from '../audio/engine';
 
 type ConfigContextValue = {
   config: AppConfig;
@@ -27,6 +28,10 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     applyBrand(brand);
   }, [brand]);
+
+  useEffect(() => {
+    setSoundEnabled(config.soundEnabled);
+  }, [config.soundEnabled]);
 
   const value = useMemo<ConfigContextValue>(
     () => ({

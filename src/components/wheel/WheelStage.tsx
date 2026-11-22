@@ -27,8 +27,8 @@ export function WheelStage({ title, footer, children }: WheelStageProps) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: 'calc(100vw - 2 * var(--space-lg))',
-        height: 'calc(100vh - 2 * var(--space-md))',
+        width: 'calc(100cqw - 2 * var(--space-lg))',
+        height: 'calc(100cqh - 2 * var(--space-md))',
       }}
     >
       <div

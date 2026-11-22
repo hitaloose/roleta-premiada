@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { useConfettiFireworks } from '../../hooks/useConfettiFireworks';
+import { useConfettiFireworks, type CelebrationVariant } from '../../hooks/useConfettiFireworks';
 
-export function FireworksLayer() {
+export function FireworksLayer({ variant = 'win' }: { variant?: CelebrationVariant }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { fireWinCelebration } = useConfettiFireworks(canvasRef);
+  const { fireCelebration } = useConfettiFireworks(canvasRef);
 
   useEffect(() => {
-    fireWinCelebration();
+    return fireCelebration(variant);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

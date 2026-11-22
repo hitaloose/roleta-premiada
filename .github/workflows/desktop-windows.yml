@@ -1,0 +1,42 @@
+name: App desktop (Windows)
+
+# Gera o instalador offline do Windows (Tauri). Rode manualmente em
+# Actions > "App desktop (Windows)" > Run workflow, ou crie uma tag v*.
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Build do app
+        run: npx tauri build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: roleta-premiada-windows
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/roleta-premiada.exe
+          if-no-files-found: error

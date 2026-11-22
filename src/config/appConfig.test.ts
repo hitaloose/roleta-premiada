@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { prizeChances, sanitizeConfig, sanitizePrizes } from './appConfig';
+import { ATTRACT_TEXT_MAX, prizeChances, sanitizeConfig, sanitizePrizes } from './appConfig';
 
 const BRAND_IDS = ['notas-raras', 'mota-fashion'];
 const DEFAULT = 'notas-raras';
@@ -16,6 +16,10 @@ describe('sanitizeConfig', () => {
       validateCpf: true,
       pin: null,
       prizesByBrand: {},
+      rotation: 0,
+      collectData: true,
+      soundEnabled: true,
+      attract: { enabled: false, title: 'Girou, ganhou!', subtitle: 'Participe grátis' },
     });
     expect(sanitizeConfig('lixo', BRAND_IDS, DEFAULT).brandId).toBe(DEFAULT);
   });
@@ -23,6 +27,37 @@ describe('sanitizeConfig', () => {
   it('ignora tema desconhecido e mantém os campos válidos', () => {
     const config = sanitizeConfig({ brandId: 'outra', validateCpf: false, pin: '1234' }, BRAND_IDS, DEFAULT);
     expect(config).toMatchObject({ brandId: DEFAULT, validateCpf: false, pin: '1234' });
+  });
+
+  it('aceita só rotações de 0, 90, 180 e 270 graus', () => {
+    expect(sanitizeConfig({ rotation: 90 }, BRAND_IDS, DEFAULT).rotation).toBe(90);
+    expect(sanitizeConfig({ rotation: 270 }, BRAND_IDS, DEFAULT).rotation).toBe(270);
+    expect(sanitizeConfig({ rotation: 45 }, BRAND_IDS, DEFAULT).rotation).toBe(0);
+    expect(sanitizeConfig({ rotation: '90' }, BRAND_IDS, DEFAULT).rotation).toBe(0);
+  });
+
+  it('lê coleta de dados e som só quando são booleanos', () => {
+    expect(sanitizeConfig({ collectData: false, soundEnabled: false }, BRAND_IDS, DEFAULT)).toMatchObject({
+      collectData: false,
+      soundEnabled: false,
+    });
+    expect(sanitizeConfig({ collectData: 'não', soundEnabled: 0 }, BRAND_IDS, DEFAULT)).toMatchObject({
+      collectData: true,
+      soundEnabled: true,
+    });
+  });
+
+  it('saneia a chamada piscante: corta espaços, limita o tamanho e volta ao padrão se vazio', () => {
+    const config = sanitizeConfig(
+      { attract: { enabled: true, title: '  Gire agora  ', subtitle: '   ' } },
+      BRAND_IDS,
+      DEFAULT,
+    );
+    expect(config.attract).toEqual({ enabled: true, title: 'Gire agora', subtitle: 'Participe grátis' });
+    expect(sanitizeConfig({ attract: { title: 'x'.repeat(100) } }, BRAND_IDS, DEFAULT).attract.title).toHaveLength(
+      ATTRACT_TEXT_MAX,
+    );
+    expect(sanitizeConfig({ attract: 'lixo' }, BRAND_IDS, DEFAULT).attract.enabled).toBe(false);
   });
 
   it('descarta PIN fora do formato', () => {

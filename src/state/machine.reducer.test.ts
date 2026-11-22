@@ -26,6 +26,16 @@ describe('machineReducer', () => {
     });
   });
 
+  it('goes from idle straight to spinning without entrant on QUICK_SPIN', () => {
+    const next = machineReducer(initialAppState, { type: 'QUICK_SPIN', prize: winPrize, prizeIndex: 2 });
+    expect(next).toEqual({ status: 'spinning', entrant: null, prize: winPrize, prizeIndex: 2, lastLoseMessage: null });
+  });
+
+  it('ignores QUICK_SPIN outside idle', () => {
+    const form = machineReducer(initialAppState, { type: 'START' });
+    expect(machineReducer(form, { type: 'QUICK_SPIN', prize: winPrize, prizeIndex: 0 })).toBe(form);
+  });
+
   it('ignores SUBMIT_NAME when not on the name step', () => {
     const state = machineReducer(initialAppState, { type: 'SUBMIT_NAME', value: 'Ana' });
     expect(state).toBe(initialAppState);

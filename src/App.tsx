@@ -15,6 +15,10 @@ import { useFullscreen } from './hooks/useFullscreen';
 import { useWinnersStorage } from './hooks/useWinnersStorage';
 import { useEntriesStorage } from './hooks/useEntriesStorage';
 import { navigate, useRoute } from './hooks/useRoute';
+import { AttractOverlay } from './components/ui/AttractOverlay';
+import { weightedDraw } from './domain/weightedDraw';
+import { preloadOverrides, unlockAudio } from './audio/engine';
+import { SOUND_FILES } from './audio/sounds';
 
 const IMPORT_NOTICE_MS = 6000;
 
@@ -22,7 +26,7 @@ export function App() {
   const state = useMachineState();
   const dispatch = useMachineDispatch();
   const route = useRoute();
-  const { prizes } = useConfig();
+  const { prizes, config } = useConfig();
   const { addWinner, clearWinners } = useWinnersStorage();
   const { entries, addEntry, isCpfUsed, exportCSV, importCSV, clearEntries, saveFailed } = useEntriesStorage();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +42,26 @@ export function App() {
     () => fileInputRef.current?.click(),
     () => navigate('/config'),
     !isConfig,
+    config.collectData
+      ? undefined
+      : () => {
+          const { item: prize, index: prizeIndex } = weightedDraw(prizes);
+          dispatch({ type: 'QUICK_SPIN', prize, prizeIndex });
+        },
   );
+
+  // Áudio: carrega os mp3 opcionais de public/sounds e destrava o
+  // AudioContext no primeiro gesto (captura, antes do atalho que gira).
+  useEffect(() => {
+    preloadOverrides(SOUND_FILES);
+    const unlock = () => unlockAudio();
+    window.addEventListener('keydown', unlock, { capture: true });
+    window.addEventListener('pointerdown', unlock, { capture: true });
+    return () => {
+      window.removeEventListener('keydown', unlock, { capture: true });
+      window.removeEventListener('pointerdown', unlock, { capture: true });
+    };
+  }, []);
 
   useEffect(() => {
     if (!importNotice) return;
@@ -83,6 +106,7 @@ export function App() {
       {state.status === 'spinning' && <SpinningScreen />}
       {state.status === 'result-win' && <ResultWinScreen onWinnerRecorded={addWinner} />}
       {state.status === 'result-lose' && <ResultLoseScreen />}
+      {state.status === 'idle' && <AttractOverlay />}
 
       {saveFailed ? (
         <StaffNotice tone="danger">

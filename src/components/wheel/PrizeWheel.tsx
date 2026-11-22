@@ -12,8 +12,27 @@ type PrizeWheelProps = {
   size?: number;
 } & (
   | { mode: 'idle' }
-  | { mode: 'spin'; targetAngle: number; durationMs: number; onSpinEnd: () => void }
+  | {
+      mode: 'spin';
+      targetAngle: number;
+      durationMs: number;
+      onSpinEnd: () => void;
+      /** A cada fatia que passa pelo ponteiro (som de tic). `speed` de 0 a 1. */
+      onSliceCross?: (speed: number) => void;
+    }
 );
+
+/** Velocidade (graus/s) tratada como 1 no `speed` do onSliceCross: perto do pico do giro. */
+const MAX_SPEED_DEG_S = 2400;
+/** Intervalo mínimo entre tics, para não virar um zumbido no começo do giro. */
+const MIN_TICK_INTERVAL_MS = 28;
+
+function currentAngle(node: Element): number {
+  const transform = getComputedStyle(node).transform;
+  if (!transform || transform === 'none') return 0;
+  const m = new DOMMatrixReadOnly(transform);
+  return (Math.atan2(m.b, m.a) * 180) / Math.PI;
+}
 
 export function PrizeWheel(props: PrizeWheelProps) {
   const { prizes, size = 520 } = props;
@@ -23,6 +42,8 @@ export function PrizeWheel(props: PrizeWheelProps) {
   const firedRef = useRef(false);
 
   const isSpin = props.mode === 'spin';
+  const propsRef = useRef(props.mode === 'spin' ? props : null);
+  propsRef.current = props.mode === 'spin' ? props : null;
 
   useEffect(() => {
     if (!isSpin) return;
@@ -56,6 +77,40 @@ export function PrizeWheel(props: PrizeWheelProps) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSpin]);
+
+  // Acompanha o ângulo real da transição CSS para tocar o tic sincronizado
+  // com cada fatia que cruza o ponteiro.
+  const sliceCount = prizes.length;
+  useEffect(() => {
+    if (!isSpin) return;
+    const node = groupRef.current;
+    if (!node) return;
+    const sliceAngle = 360 / sliceCount;
+    let raf = 0;
+    let last = currentAngle(node);
+    let lastTime = performance.now();
+    let total = 0;
+    let lastSlice = 0;
+    let lastTickAt = 0;
+    const loop = (now: number) => {
+      const angle = currentAngle(node);
+      const delta = ((angle - last + 540) % 360) - 180;
+      last = angle;
+      total += Math.max(0, delta);
+      const dt = Math.max(1, now - lastTime);
+      lastTime = now;
+      const slice = Math.floor(total / sliceAngle);
+      if (slice !== lastSlice && now - lastTickAt >= MIN_TICK_INTERVAL_MS) {
+        lastSlice = slice;
+        lastTickAt = now;
+        const speed = (Math.max(0, delta) / dt) * 1000;
+        propsRef.current?.onSliceCross?.(Math.min(1, speed / MAX_SPEED_DEG_S));
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [isSpin, sliceCount]);
 
   const style = isSpin
     ? {

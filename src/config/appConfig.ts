@@ -13,7 +13,23 @@ export type AppConfig = {
   pin: string | null;
   /** Itens da roleta editados por tema. Sem entrada, vale o padrão do tema (src/brands/<marca>/prizes.ts). */
   prizesByBrand: Record<string, Prize[]>;
+  /** Rotação do conteúdo em graus (horário), para TV montada na vertical com o PC em paisagem. */
+  rotation: ScreenRotation;
+  /** Desligado: a roleta não pede nem salva dados; Enter/Espaço na tela inicial já gira. */
+  collectData: boolean;
+  /** Sons do giro, do prêmio, do super prêmio e da falha. */
+  soundEnabled: boolean;
+  /** Chamada piscante (título + subtítulo) centralizada por cima da tela inicial. */
+  attract: AttractConfig;
 };
+
+export type AttractConfig = { enabled: boolean; title: string; subtitle: string };
+
+export const ATTRACT_TEXT_MAX = 60;
+export const DEFAULT_ATTRACT: AttractConfig = { enabled: false, title: 'Girou, ganhou!', subtitle: 'Participe grátis' };
+
+export type ScreenRotation = 0 | 90 | 180 | 270;
+export const SCREEN_ROTATIONS: readonly ScreenRotation[] = [0, 90, 180, 270];
 
 export const CONFIG_STORAGE_KEY = 'roleta-premiada:config';
 
@@ -22,11 +38,27 @@ export const MIN_PRIZES = 2;
 export const PIN_PATTERN = /^\d{4,8}$/;
 
 export function defaultConfig(defaultBrandId: string): AppConfig {
-  return { brandId: defaultBrandId, validateCpf: true, pin: null, prizesByBrand: {} };
+  return {
+    brandId: defaultBrandId,
+    validateCpf: true,
+    pin: null,
+    prizesByBrand: {},
+    rotation: 0,
+    collectData: true,
+    soundEnabled: true,
+    attract: { ...DEFAULT_ATTRACT },
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/** Texto da chamada: sem espaços nas pontas e até ATTRACT_TEXT_MAX caracteres; vazio cai no padrão. */
+export function sanitizeAttractText(value: unknown, fallback: string): string {
+  if (typeof value !== 'string') return fallback;
+  const text = value.trim().slice(0, ATTRACT_TEXT_MAX).trim();
+  return text || fallback;
 }
 
 function sanitizePrize(value: unknown): Prize | null {
@@ -55,6 +87,17 @@ export function sanitizeConfig(value: unknown, brandIds: string[], defaultBrandI
   if (typeof value.brandId === 'string' && brandIds.includes(value.brandId)) config.brandId = value.brandId;
   if (typeof value.validateCpf === 'boolean') config.validateCpf = value.validateCpf;
   if (typeof value.pin === 'string' && PIN_PATTERN.test(value.pin)) config.pin = value.pin;
+  if (SCREEN_ROTATIONS.includes(value.rotation as ScreenRotation)) config.rotation = value.rotation as ScreenRotation;
+  if (typeof value.collectData === 'boolean') config.collectData = value.collectData;
+  if (typeof value.soundEnabled === 'boolean') config.soundEnabled = value.soundEnabled;
+  if (isRecord(value.attract)) {
+    const { enabled, title, subtitle } = value.attract;
+    config.attract = {
+      enabled: typeof enabled === 'boolean' ? enabled : DEFAULT_ATTRACT.enabled,
+      title: sanitizeAttractText(title, DEFAULT_ATTRACT.title),
+      subtitle: sanitizeAttractText(subtitle, DEFAULT_ATTRACT.subtitle),
+    };
+  }
 
   if (isRecord(value.prizesByBrand)) {
     for (const [brandId, prizes] of Object.entries(value.prizesByBrand)) {

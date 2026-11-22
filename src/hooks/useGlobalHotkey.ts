@@ -21,6 +21,10 @@ import type { AppEvent, AppState } from '../state/machine.types';
  * Evitamos Ctrl+Shift+I/J/C (DevTools), Ctrl+Shift+O (favoritos) e
  * Ctrl+Shift+M (troca de perfil), reservados pelo Chrome.
  *
+ * Com `onQuickSpin` (modo rápido: coleta de dados desligada na /config),
+ * Enter ou Espaço em `idle` giram direto, sem formulário. Teclas segurando
+ * (`event.repeat`) são ignoradas para o Enter do resultado não girar de novo.
+ *
  * Com `enabled` false (ex.: na /config) nenhum atalho é tratado.
  */
 export function useGlobalHotkey(
@@ -30,6 +34,7 @@ export function useGlobalHotkey(
   onImport?: () => void,
   onOpenConfig?: () => void,
   enabled = true,
+  onQuickSpin?: () => void,
 ) {
   useEffect(() => {
     if (!enabled) return;
@@ -53,6 +58,12 @@ export function useGlobalHotkey(
         return;
       }
 
+      if (onQuickSpin && state.status === 'idle' && (event.code === 'Space' || event.code === 'Enter')) {
+        event.preventDefault();
+        if (!event.repeat) onQuickSpin();
+        return;
+      }
+
       if (state.status === 'idle' && event.code === 'Space') {
         event.preventDefault();
         dispatch({ type: 'START' });
@@ -70,11 +81,12 @@ export function useGlobalHotkey(
         (event.code === 'Space' || event.code === 'Enter')
       ) {
         event.preventDefault();
+        if (event.repeat) return;
         dispatch({ type: 'ACK_RESULT' });
       }
     }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [state, dispatch, onExport, onImport, onOpenConfig, enabled]);
+  }, [state, dispatch, onExport, onImport, onOpenConfig, enabled, onQuickSpin]);
 }

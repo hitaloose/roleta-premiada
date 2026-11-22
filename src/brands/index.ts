@@ -13,18 +13,7 @@ export function getBrand(id: string): Brand | undefined {
 
 export { publicAsset } from './publicAsset';
 
-const FONTS_LINK_ID = 'brand-fonts';
-
-/** Ativa os tokens CSS da marca e troca as fontes dela. Pode ser chamado de novo ao trocar o tema. */
+/** Ativa os tokens CSS da marca. As fontes de todas as marcas vêm no build (ver `src/brands/<marca>/index.ts`). */
 export function applyBrand(brand: Brand) {
   document.documentElement.dataset.brand = brand.id;
-
-  let fonts = document.getElementById(FONTS_LINK_ID) as HTMLLinkElement | null;
-  if (!fonts) {
-    fonts = document.createElement('link');
-    fonts.id = FONTS_LINK_ID;
-    fonts.rel = 'stylesheet';
-    document.head.appendChild(fonts);
-  }
-  if (fonts.href !== brand.fontsHref) fonts.href = brand.fontsHref;
 }

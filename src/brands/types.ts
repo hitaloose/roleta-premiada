@@ -14,8 +14,6 @@ export type Brand = {
     /** Largura CSS da logo no canto inferior direito da tela inicial. */
     width: string;
   };
-  /** URL do Google Fonts com as fontes usadas no tokens.css da marca. */
-  fontsHref: string;
   confettiColors: string[];
   Background: ComponentType;
   prizes: Prize[];
