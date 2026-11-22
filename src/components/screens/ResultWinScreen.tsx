@@ -5,6 +5,7 @@ import { FireworksLayer } from '../effects/FireworksLayer';
 import { KeyHint } from '../ui/KeyHint';
 import { TIMEOUTS } from '../../config/timing';
 import type { Winner } from '../../types/winner';
+import { publicAsset } from '../../brands/publicAsset';
 
 export function ResultWinScreen({ onWinnerRecorded }: { onWinnerRecorded: (winner: Winner) => void }) {
   const state = useMachineState();
@@ -21,7 +22,7 @@ export function ResultWinScreen({ onWinnerRecorded }: { onWinnerRecorded: (winne
       onWinnerRecorded({ name: state.entrant.name, wonAt: new Date().toISOString(), prizeLabel: state.prize.label });
     }
 
-    audioRef.current = new Audio('/sounds/win.mp3');
+    audioRef.current = new Audio(publicAsset('sounds/win.mp3'));
     audioRef.current.play().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -17,17 +17,30 @@ import type { AppEvent, AppState } from '../state/machine.types';
  *
  * Ctrl+Shift+E e Ctrl+Shift+U são atalhos ocultos (não anunciados na UI)
  * para a equipe do evento exportar e importar os dados dos participantes
- * em CSV. Evitamos Ctrl+Shift+I (DevTools), Ctrl+Shift+O (favoritos) e
+ * em CSV. Ctrl+Shift+K (só em `idle`) abre a tela /config da equipe.
+ * Evitamos Ctrl+Shift+I/J/C (DevTools), Ctrl+Shift+O (favoritos) e
  * Ctrl+Shift+M (troca de perfil), reservados pelo Chrome.
+ *
+ * Com `enabled` false (ex.: na /config) nenhum atalho é tratado.
  */
 export function useGlobalHotkey(
   state: AppState,
   dispatch: Dispatch<AppEvent>,
   onExport?: () => void,
   onImport?: () => void,
+  onOpenConfig?: () => void,
+  enabled = true,
 ) {
   useEffect(() => {
+    if (!enabled) return;
+
     function handleKeyDown(event: KeyboardEvent) {
+      if (onOpenConfig && state.status === 'idle' && event.ctrlKey && event.shiftKey && event.code === 'KeyK') {
+        event.preventDefault();
+        onOpenConfig();
+        return;
+      }
+
       if (onExport && event.ctrlKey && event.shiftKey && event.code === 'KeyE') {
         event.preventDefault();
         onExport();
@@ -63,5 +76,5 @@ export function useGlobalHotkey(
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [state, dispatch, onExport, onImport]);
+  }, [state, dispatch, onExport, onImport, onOpenConfig, enabled]);
 }

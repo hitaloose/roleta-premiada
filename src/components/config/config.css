@@ -1,0 +1,329 @@
+/* Tela da equipe (/config). Paleta neutra própria, independente do tema da roleta. */
+.cfg {
+  --cfg-bg: #f4f5f7;
+  --cfg-surface: #ffffff;
+  --cfg-border: #d9dce1;
+  --cfg-text: #1d2129;
+  --cfg-muted: #5e6673;
+  --cfg-accent: #2457c5;
+  --cfg-accent-text: #ffffff;
+  --cfg-danger: #b42318;
+  --cfg-ok: #1f7a3d;
+  --cfg-warn: #9a6700;
+
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+  background: var(--cfg-bg);
+  color: var(--cfg-text);
+  font-family: system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  cursor: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.cfg * {
+  cursor: inherit;
+}
+
+.cfg button,
+.cfg select,
+.cfg input[type='checkbox'] {
+  cursor: pointer;
+}
+
+.cfg input[type='text'],
+.cfg input[type='number'],
+.cfg input[type='password'] {
+  cursor: text;
+}
+
+.cfg-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.cfg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cfg-header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.cfg-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--cfg-border);
+  margin-bottom: 20px;
+}
+
+.cfg-tab {
+  border: 0;
+  background: none;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cfg-muted);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+
+.cfg-tab[aria-selected='true'] {
+  color: var(--cfg-accent);
+  border-bottom-color: var(--cfg-accent);
+}
+
+.cfg-card {
+  background: var(--cfg-surface);
+  border: 1px solid var(--cfg-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.cfg-card h2 {
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+
+.cfg-hint {
+  color: var(--cfg-muted);
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+
+.cfg-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfg-btn {
+  border: 1px solid var(--cfg-border);
+  background: var(--cfg-surface);
+  color: var(--cfg-text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.cfg-btn:hover:not(:disabled) {
+  border-color: var(--cfg-muted);
+}
+
+.cfg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cfg-btn-primary {
+  background: var(--cfg-accent);
+  border-color: var(--cfg-accent);
+  color: var(--cfg-accent-text);
+}
+
+.cfg-btn-danger {
+  background: var(--cfg-danger);
+  border-color: var(--cfg-danger);
+  color: #fff;
+}
+
+.cfg-btn-small {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.cfg-input {
+  border: 1px solid var(--cfg-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 15px;
+  background: #fff;
+  color: var(--cfg-text);
+  min-width: 0;
+}
+
+.cfg-input:focus,
+.cfg-btn:focus-visible,
+.cfg-tab:focus-visible {
+  outline: 2px solid var(--cfg-accent);
+  outline-offset: 1px;
+}
+
+.cfg-choice {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cfg-choice label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--cfg-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.cfg-choice label:has(input:checked) {
+  border-color: var(--cfg-accent);
+  box-shadow: inset 0 0 0 1px var(--cfg-accent);
+}
+
+.cfg-msg {
+  font-size: 14px;
+  margin: 10px 0 0;
+}
+
+.cfg-msg-ok {
+  color: var(--cfg-ok);
+}
+
+.cfg-msg-error {
+  color: var(--cfg-danger);
+}
+
+.cfg-msg-warn {
+  color: var(--cfg-warn);
+}
+
+.cfg-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.cfg-stat {
+  flex: 1 1 140px;
+  background: var(--cfg-surface);
+  border: 1px solid var(--cfg-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.cfg-stat strong {
+  display: block;
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cfg-stat span {
+  color: var(--cfg-muted);
+  font-size: 14px;
+}
+
+.cfg-table-wrap {
+  overflow-x: auto;
+  max-height: 60vh;
+}
+
+.cfg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.cfg-table th,
+.cfg-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--cfg-border);
+  white-space: nowrap;
+}
+
+.cfg-table th {
+  position: sticky;
+  top: 0;
+  background: var(--cfg-surface);
+  color: var(--cfg-muted);
+  font-weight: 600;
+}
+
+.cfg-table td.cfg-num,
+.cfg-table th.cfg-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cfg-table input.cfg-input {
+  width: 100%;
+}
+
+.cfg-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cfg-badge-win {
+  background: #dcf3e3;
+  color: var(--cfg-ok);
+}
+
+.cfg-badge-lose {
+  background: #eceef1;
+  color: var(--cfg-muted);
+}
+
+.cfg-gate {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.cfg-gate form {
+  width: min(100%, 360px);
+}
+
+.cfg-gate .cfg-input {
+  width: 100%;
+  font-size: 22px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.cfg-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 20;
+}
+
+.cfg-modal {
+  width: min(100%, 460px);
+  background: var(--cfg-surface);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.cfg-modal h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+}
+
+/* PIN mascarado sem type="password": evita o popup do gerenciador de senhas do Chrome, que engole o Enter. */
+.cfg input[data-pin] {
+  -webkit-text-security: disc;
+}

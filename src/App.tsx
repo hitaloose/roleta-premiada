@@ -7,24 +7,38 @@ import { FormScreen } from './components/screens/FormScreen';
 import { SpinningScreen } from './components/screens/SpinningScreen';
 import { ResultWinScreen } from './components/screens/ResultWinScreen';
 import { ResultLoseScreen } from './components/screens/ResultLoseScreen';
+import { ConfigScreen } from './components/config/ConfigScreen';
 import { useMachineDispatch, useMachineState } from './state/MachineContext';
+import { useConfig } from './state/ConfigContext';
 import { useGlobalHotkey } from './hooks/useGlobalHotkey';
 import { useFullscreen } from './hooks/useFullscreen';
 import { useWinnersStorage } from './hooks/useWinnersStorage';
 import { useEntriesStorage } from './hooks/useEntriesStorage';
+import { navigate, useRoute } from './hooks/useRoute';
 
 const IMPORT_NOTICE_MS = 6000;
 
 export function App() {
   const state = useMachineState();
   const dispatch = useMachineDispatch();
-  const { addWinner } = useWinnersStorage();
-  const { addEntry, isCpfUsed, exportCSV, importCSV, saveFailed } = useEntriesStorage();
+  const route = useRoute();
+  const { prizes } = useConfig();
+  const { addWinner, clearWinners } = useWinnersStorage();
+  const { entries, addEntry, isCpfUsed, exportCSV, importCSV, clearEntries, saveFailed } = useEntriesStorage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importNotice, setImportNotice] = useState<{ tone: StaffNoticeTone; text: string } | null>(null);
 
+  const isConfig = route === '/config';
+
   useFullscreen();
-  useGlobalHotkey(state, dispatch, exportCSV, () => fileInputRef.current?.click());
+  useGlobalHotkey(
+    state,
+    dispatch,
+    exportCSV,
+    () => fileInputRef.current?.click(),
+    () => navigate('/config'),
+    !isConfig,
+  );
 
   useEffect(() => {
     if (!importNotice) return;
@@ -37,13 +51,29 @@ export function App() {
     event.target.value = '';
     if (!file) return;
     try {
-      const { added, skipped } = await importCSV(file);
+      const { added, skipped } = await importCSV(file, prizes);
       const skippedText = skipped > 0 ? ` (${skipped} linha(s) inválida(s) ignorada(s))` : '';
       setImportNotice({ tone: 'info', text: `Importação concluída: ${added} participante(s) novo(s)${skippedText}.` });
     } catch (error) {
       const reason = error instanceof Error ? error.message : 'arquivo inválido';
       setImportNotice({ tone: 'danger', text: `Falha ao importar: ${reason}.` });
     }
+  }
+
+  if (isConfig) {
+    return (
+      <ConfigScreen
+        entries={entries}
+        saveFailed={saveFailed}
+        onExport={exportCSV}
+        onImport={(file) => importCSV(file, prizes)}
+        onClearData={() => {
+          clearEntries();
+          clearWinners();
+        }}
+        onExit={() => navigate('/')}
+      />
+    );
   }
 
   return (

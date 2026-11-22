@@ -4,13 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "start-nr": "vite --mode notas-raras --open",
-    "start-mf": "vite --mode mota-fashion --open",
-    "event-nr": "tsc -b && vite build --mode notas-raras && vite preview --open",
-    "event-mf": "tsc -b && vite build --mode mota-fashion && vite preview --open",
+    "dev": "vite --open",
     "build": "tsc -b && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --open",
+    "event": "tsc -b && vite build && vite preview --open",
     "test": "vitest run"
   },
   "dependencies": {

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
+import { publicAsset } from '../publicAsset';
 
 /** Aquarela de fundo (em public/mota-fashion). Opções: bg1.JPG, bg2.JPG, bg3.JPG. */
-const BACKGROUND_IMAGE = '/mota-fashion/bg2.JPG';
+const BACKGROUND_IMAGE = publicAsset('mota-fashion/bg2.JPG');
 
 /** Coração em traço fino, no estilo dos ícones das artes da marca. viewBox 24x24. */
 const HEART_PATH = 'M12 20.5C12 20.5 3 14.6 3 8.9 3 6 5.2 3.8 7.9 3.8c1.7 0 3.2.9 4.1 2.3.9-1.4 2.4-2.3 4.1-2.3C18.8 3.8 21 6 21 8.9c0 5.7-9 11.6-9 11.6z';

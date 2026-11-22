@@ -1,7 +1,7 @@
-import { brand } from '../../brands';
 import { PrizeWheel } from '../wheel/PrizeWheel';
 import { WheelStage } from '../wheel/WheelStage';
 import { KeyHint } from '../ui/KeyHint';
+import { useConfig } from '../../state/ConfigContext';
 
 /**
  * Layout para TV na horizontal: nome da marca no topo, roleta do maior
@@ -9,6 +9,7 @@ import { KeyHint } from '../ui/KeyHint';
  * lista de últimos ganhadores (WinnersTicker) está oculta neste layout.
  */
 export function IdleScreen() {
+  const { brand, prizes } = useConfig();
   return (
     <>
       <WheelStage
@@ -19,7 +20,7 @@ export function IdleScreen() {
         }
         footer={<KeyHint>Aperte ESPAÇO para começar</KeyHint>}
       >
-        {(size) => <PrizeWheel prizes={brand.prizes} mode="idle" size={size} />}
+        {(size) => <PrizeWheel prizes={prizes} mode="idle" size={size} />}
       </WheelStage>
       <img
         src={brand.logo.src}

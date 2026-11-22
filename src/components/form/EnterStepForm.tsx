@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { FormField } from './FormField';
 import { useMachineDispatch, useMachineState } from '../../state/MachineContext';
+import { useConfig } from '../../state/ConfigContext';
 import { useAutoTimeout } from '../../hooks/useAutoTimeout';
 import { isValidName } from '../../domain/validators/name';
 import { formatPhoneBR, isValidPhoneBR } from '../../domain/validators/phone';
 import { formatCPF, isValidCPF } from '../../domain/validators/cpf';
 import { weightedDraw } from '../../domain/weightedDraw';
-import { brand } from '../../brands';
 import { TIMEOUTS } from '../../config/timing';
 import type { EntrantData } from '../../types/form';
 import type { EntryRecord } from '../../types/entry';
@@ -19,6 +19,7 @@ type EnterStepFormProps = {
 export function EnterStepForm({ isCpfUsed, addEntry }: EnterStepFormProps) {
   const state = useMachineState();
   const dispatch = useMachineDispatch();
+  const { config, prizes } = useConfig();
   const [activityTick, setActivityTick] = useState(0);
 
   useAutoTimeout(
@@ -68,13 +69,17 @@ export function EnterStepForm({ isCpfUsed, addEntry }: EnterStepFormProps) {
       label="Seu CPF"
       placeholder="000.000.000-00"
       format={formatCPF}
-      validate={(value) => isValidCPF(value) && !isCpfUsed(value)}
+      validate={(value) =>
+        config.validateCpf ? isValidCPF(value) && !isCpfUsed(value) : value.replace(/\D/g, '').length > 0
+      }
       errorMessage={(value) =>
-        isValidCPF(value) ? 'Este CPF já participou. Cada CPF pode rodar a roleta uma única vez.' : 'Digite um CPF válido.'
+        config.validateCpf && isValidCPF(value)
+          ? 'Este CPF já participou. Cada CPF pode rodar a roleta uma única vez.'
+          : 'Digite um CPF válido.'
       }
       onSubmit={(value) => {
         const entrant: EntrantData = { ...(state.data as Omit<EntrantData, 'cpf'>), cpf: value };
-        const { item: prize, index: prizeIndex } = weightedDraw(brand.prizes);
+        const { item: prize, index: prizeIndex } = weightedDraw(prizes);
         addEntry({
           name: entrant.name,
           phone: entrant.phone,

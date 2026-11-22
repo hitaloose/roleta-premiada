@@ -28,5 +28,14 @@ export function useWinnersStorage() {
     });
   }
 
-  return { winners, addWinner };
+  function clearWinners() {
+    setWinners([]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // localStorage indisponível: já zerado em memória.
+    }
+  }
+
+  return { winners, addWinner, clearWinners };
 }

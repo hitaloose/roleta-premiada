@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import confetti, { type CreateTypes } from 'canvas-confetti';
-import { brand } from '../brands';
-
-const COLORS = brand.confettiColors;
+import { useConfig } from '../state/ConfigContext';
 
 export function useConfettiFireworks(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
   const instanceRef = useRef<CreateTypes | null>(null);
+  const COLORS = useConfig().brand.confettiColors;
 
   useEffect(() => {
     if (!canvasRef.current) return;

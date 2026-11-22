@@ -2,29 +2,29 @@ import type { Brand } from './types';
 import { motaFashion } from './mota-fashion';
 import { notasRaras } from './notas-raras';
 
-const BRANDS: Record<string, Brand> = {
-  [notasRaras.id]: notasRaras,
-  [motaFashion.id]: motaFashion,
-};
+/** Temas disponíveis na tela /config, na ordem em que aparecem lá. */
+export const BRANDS: Brand[] = [notasRaras, motaFashion];
 
-/**
- * Marca do build, escolhida por VITE_BRAND (ex.: no `.env.local` de cada
- * computador do evento). Sem a variável, usa a Notas Raras.
- */
-const brandId = import.meta.env.VITE_BRAND ?? notasRaras.id;
-const selected = BRANDS[brandId];
-if (!selected) {
-  throw new Error(`VITE_BRAND desconhecida: "${brandId}". Opções: ${Object.keys(BRANDS).join(', ')}`);
+export const DEFAULT_BRAND_ID = notasRaras.id;
+
+export function getBrand(id: string): Brand | undefined {
+  return BRANDS.find((b) => b.id === id);
 }
 
-export const brand: Brand = selected;
+export { publicAsset } from './publicAsset';
 
-/** Ativa os tokens CSS da marca e carrega as fontes dela. Chamar antes do primeiro render. */
-export function applyBrand() {
+const FONTS_LINK_ID = 'brand-fonts';
+
+/** Ativa os tokens CSS da marca e troca as fontes dela. Pode ser chamado de novo ao trocar o tema. */
+export function applyBrand(brand: Brand) {
   document.documentElement.dataset.brand = brand.id;
 
-  const fonts = document.createElement('link');
-  fonts.rel = 'stylesheet';
-  fonts.href = brand.fontsHref;
-  document.head.appendChild(fonts);
+  let fonts = document.getElementById(FONTS_LINK_ID) as HTMLLinkElement | null;
+  if (!fonts) {
+    fonts = document.createElement('link');
+    fonts.id = FONTS_LINK_ID;
+    fonts.rel = 'stylesheet';
+    document.head.appendChild(fonts);
+  }
+  if (fonts.href !== brand.fontsHref) fonts.href = brand.fontsHref;
 }

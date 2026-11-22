@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { EntryRecord } from '../types/entry';
-import { brand } from '../brands';
+import type { Prize } from '../types/prize';
 import { entriesToCsv, mergeEntries, normalizeCpf, parseEntriesCsv } from '../domain/entriesCsv';
 
 const STORAGE_KEY = 'roleta-premiada:entries';
@@ -77,13 +77,22 @@ export function useEntriesStorage() {
     URL.revokeObjectURL(url);
   }
 
-  /** Junta os participantes de um CSV exportado aos atuais, sem duplicar. Lança erro se o arquivo for inválido. */
-  async function importCSV(file: File): Promise<ImportResult> {
-    const { entries: imported, skipped } = parseEntriesCsv(await file.text(), brand.prizes);
+  /**
+   * Junta os participantes de um CSV exportado aos atuais, sem duplicar.
+   * `prizes` (itens do tema ativo) recupera se cada ganhador foi 'win' ou
+   * 'super-win'. Lança erro se o arquivo for inválido.
+   */
+  async function importCSV(file: File, prizes: Prize[]): Promise<ImportResult> {
+    const { entries: imported, skipped } = parseEntriesCsv(await file.text(), prizes);
     const { merged, added } = mergeEntries(entries, imported);
     if (added > 0) save(merged);
     return { added, skipped };
   }
 
-  return { entries, addEntry, isCpfUsed, exportCSV, importCSV, saveFailed };
+  /** Apaga todos os participantes (e libera os CPFs). */
+  function clearEntries() {
+    save([]);
+  }
+
+  return { entries, addEntry, isCpfUsed, exportCSV, importCSV, clearEntries, saveFailed };
 }

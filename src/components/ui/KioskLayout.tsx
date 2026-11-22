@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
-import { brand } from '../../brands';
+import { useConfig } from '../../state/ConfigContext';
 
 export function KioskLayout({ children }: { children: ReactNode }) {
+  const { brand } = useConfig();
   return (
     <div
       style={{
@@ -18,8 +19,8 @@ export function KioskLayout({ children }: { children: ReactNode }) {
         overflow: 'hidden',
       }}
     >
-      <brand.Background />
-   
+      <brand.Background key={brand.id} />
+
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {children}
       </div>

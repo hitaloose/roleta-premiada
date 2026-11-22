@@ -10,12 +10,7 @@ echo ============================================
 echo   Roleta Premiada - Build e Start do Evento
 echo ============================================
 echo.
-if exist ".env.local" (
-  for /f "tokens=2 delims==" %%B in ('findstr /b "VITE_BRAND=" .env.local') do echo Marca: %%B
-) else (
-  echo AVISO: sem .env.local, usando a marca padrao (notas-raras).
-  echo Para outra marca, copie .env.example para .env.local e edite.
-)
+echo Tema, itens da roleta e CPF: Ctrl+Shift+K na tela inicial (PIN da equipe).
 echo.
 echo IMPORTANTE: feche todas as janelas do Chrome
 echo antes de continuar, senao o modo kiosk pode

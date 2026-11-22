@@ -1,27 +1,28 @@
 import { useRef } from 'react';
-import { brand } from '../../brands';
 import { TIMEOUTS } from '../../config/timing';
 import { PrizeWheel } from '../wheel/PrizeWheel';
 import { WheelStage } from '../wheel/WheelStage';
 import { computeFinalAngle } from '../../domain/wheelAngle';
 import { pickLoseMessage } from '../../domain/loseMessage';
 import { useMachineDispatch, useMachineState } from '../../state/MachineContext';
+import { useConfig } from '../../state/ConfigContext';
 
 export function SpinningScreen() {
   const state = useMachineState();
   const dispatch = useMachineDispatch();
+  const { brand, prizes } = useConfig();
   const targetAngleRef = useRef<number | null>(null);
 
   if (state.status !== 'spinning') return null;
 
   if (targetAngleRef.current === null) {
-    targetAngleRef.current = computeFinalAngle(state.prizeIndex, brand.prizes.length);
+    targetAngleRef.current = computeFinalAngle(state.prizeIndex, prizes.length);
   }
 
   function handleSpinEnd() {
     if (state.status !== 'spinning') return;
     const message =
-      state.prize.kind === 'lose' ? pickLoseMessage(state.lastLoseMessage ?? undefined) : undefined;
+      state.prize.kind === 'lose' ? pickLoseMessage(brand.loseMessages, state.lastLoseMessage ?? undefined) : undefined;
     dispatch({ type: 'SPIN_DONE', message });
   }
 
@@ -37,7 +38,7 @@ export function SpinningScreen() {
     >
       {(size) => (
         <PrizeWheel
-          prizes={brand.prizes}
+          prizes={prizes}
           mode="spin"
           size={size}
           targetAngle={targetAngle}
