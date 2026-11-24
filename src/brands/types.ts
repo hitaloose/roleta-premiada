@@ -15,6 +15,13 @@ export type Brand = {
     width: string;
   };
   confettiColors: string[];
+  /** Ajustes da tela da roleta (WheelStage). */
+  stage?: {
+    /** Esconde a chamada "Aperte..." (só o nome da marca fica em cima). */
+    hideHint?: boolean;
+    /** Tamanho CSS do nome da marca nas duas orientações (padrão: grande de pé, normal na horizontal). */
+    titleSize?: string;
+  };
   Background: ComponentType;
   prizes: Prize[];
   loseMessages: string[];
