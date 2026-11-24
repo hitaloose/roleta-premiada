@@ -21,6 +21,34 @@
   --color-bulb-highlight: #fff8e0;
   --color-bulb-glow: rgba(212, 175, 55, 0.7);
 
+  /* Nome da marca em dourado metálico (tons escuros o bastante para ler
+     sobre o marfim) com uma sombra marrom fina para destacar o contorno.
+     A textura ondula devagar e um brilho atravessa as letras a cada ~7s. */
+  --stage-title-color: transparent;
+  --stage-title-fill: linear-gradient(
+    180deg,
+    #8a5d14 0%,
+    #c99a2e 12%,
+    #e2bd55 22%,
+    #9a6c17 38%,
+    #d9b04a 52%,
+    #a87a1e 64%,
+    #e6c463 78%,
+    #9a6c17 90%,
+    #8a5d14 100%
+  );
+  --stage-title-shadow: drop-shadow(0 2px 0 rgba(59, 42, 23, 0.35));
+  --stage-title-animation: stage-title-drift 9s ease-in-out infinite alternate;
+  --stage-title-shine: linear-gradient(
+    105deg,
+    transparent 44%,
+    rgba(255, 238, 180, 0.15) 47%,
+    rgba(255, 243, 200, 0.8) 50%,
+    rgba(255, 238, 180, 0.15) 53%,
+    transparent 56%
+  );
+  --stage-title-shine-animation: stage-title-shine 7s ease-in-out 1.5s infinite;
+
   --font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   /* Fonte de destaque com estética árabe (caligrafia), usada nos títulos. */
   --font-family-display: 'Rakkas', 'Segoe UI', cursive;

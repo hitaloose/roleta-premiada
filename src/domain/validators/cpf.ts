@@ -23,3 +23,13 @@ export function formatCPF(raw: string): string {
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 }
+
+/** Esconde com `*` todos os dígitos menos os 3 últimos, mantendo `.` e `-`. */
+export function maskCPF(formatted: string): string {
+  let toHide = Math.max(0, formatted.replace(/\D/g, '').length - 3);
+  return formatted.replace(/\d/g, (digit) => {
+    if (toHide === 0) return digit;
+    toHide--;
+    return '*';
+  });
+}

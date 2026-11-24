@@ -5,7 +5,7 @@ import { useConfig } from '../../state/ConfigContext';
 import { useAutoTimeout } from '../../hooks/useAutoTimeout';
 import { isValidName } from '../../domain/validators/name';
 import { formatPhoneBR, isValidPhoneBR } from '../../domain/validators/phone';
-import { formatCPF, isValidCPF } from '../../domain/validators/cpf';
+import { formatCPF, isValidCPF, maskCPF } from '../../domain/validators/cpf';
 import { weightedDraw } from '../../domain/weightedDraw';
 import { TIMEOUTS } from '../../config/timing';
 import type { EntrantData } from '../../types/form';
@@ -69,6 +69,7 @@ export function EnterStepForm({ isCpfUsed, addEntry }: EnterStepFormProps) {
       label="Seu CPF"
       placeholder="000.000.000-00"
       format={formatCPF}
+      mask={maskCPF}
       validate={(value) =>
         config.validateCpf ? isValidCPF(value) && !isCpfUsed(value) : value.replace(/\D/g, '').length > 0
       }

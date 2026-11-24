@@ -11,7 +11,7 @@ export type Brand = {
   name: string;
   logo: {
     src: string;
-    /** Largura CSS da logo no canto inferior direito da tela inicial. */
+    /** Largura CSS da logo quando ela não cabe embaixo da roleta (TV em paisagem) e vai para o canto inferior direito. */
     width: string;
   };
   confettiColors: string[];

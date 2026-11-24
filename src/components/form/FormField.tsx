@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { applyMaskedEdit } from '../../domain/maskedInput';
 
 type FormFieldProps = {
   label: string;
   placeholder: string;
   format?: (raw: string) => string;
+  /** Mostra o valor mascarado (ex.: CPF com `*`); o valor real continua no estado. */
+  mask?: (value: string) => string;
   validate: (value: string) => boolean;
   errorMessage: string | ((value: string) => string);
   onSubmit: (value: string) => void;
@@ -14,6 +17,7 @@ export function FormField({
   label,
   placeholder,
   format,
+  mask,
   validate,
   errorMessage,
   onSubmit,
@@ -27,9 +31,21 @@ export function FormField({
     inputRef.current?.focus();
   }, []);
 
+  const display = mask ? mask(value) : value;
+
+  // Com máscara a edição só funciona no fim do texto: mantém o cursor lá.
+  function keepCaretAtEnd() {
+    const input = inputRef.current;
+    if (!mask || !input) return;
+    const end = input.value.length;
+    if (input.selectionStart !== end || input.selectionEnd !== end) input.setSelectionRange(end, end);
+  }
+
   function handleChange(raw: string) {
     setError(false);
-    setValue(format ? format(raw) : raw);
+    const identity = (text: string) => text;
+    if (mask) setValue(applyMaskedEdit(value, display, raw, format ?? identity));
+    else setValue(format ? format(raw) : raw);
     onKeystroke?.();
   }
 
@@ -48,9 +64,10 @@ export function FormField({
       <label style={{ fontSize: 'var(--font-title)', color: 'var(--color-text)' }}>{label}</label>
       <input
         ref={inputRef}
-        value={value}
+        value={display}
         placeholder={placeholder}
         onChange={(e) => handleChange(e.target.value)}
+        onSelect={keepCaretAtEnd}
         onKeyDown={handleKeyDown}
         className="form-field-input"
         style={{

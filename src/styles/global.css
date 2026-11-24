@@ -25,6 +25,59 @@ body {
   font-family: var(--font-family-display);
 }
 
+/* Nome da marca no topo da tela inicial. Cada marca pode dar um
+   preenchimento próprio (ex.: dourado metálico) via --stage-title-fill;
+   sem ele, fica na cor do texto. drop-shadow em vez de text-shadow porque
+   o texto fica transparente com background-clip.
+   Brilho opcional (--stage-title-shine): uma cópia do texto por cima (::after,
+   lendo data-text) com uma faixa clara que atravessa as letras de vez em
+   quando, enquanto a textura do preenchimento ondula devagar. */
+.stage-title {
+  position: relative;
+  color: var(--stage-title-color, var(--color-text));
+  background-image: var(--stage-title-fill, none);
+  background-size: 100% 250%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: var(--stage-title-shadow, none);
+  animation: var(--stage-title-animation, none);
+}
+
+.stage-title[data-text]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background-image: var(--stage-title-shine, none);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+  animation: var(--stage-title-shine-animation, none);
+}
+
+/* Textura do dourado subindo e descendo devagar. */
+@keyframes stage-title-drift {
+  from { background-position: 0 0%; }
+  to { background-position: 0 100%; }
+}
+
+/* Faixa de brilho atravessa em ~1,7s e some até a próxima passada. */
+@keyframes stage-title-shine {
+  0% { background-position: 100% 0; }
+  25% { background-position: 0% 0; }
+  100% { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-title,
+  .stage-title[data-text]::after {
+    animation: none;
+  }
+}
+
 button,
 input {
   font-family: inherit;
