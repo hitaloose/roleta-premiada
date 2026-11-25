@@ -1,0 +1,57 @@
+.nr-lose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 2.2cqmin, 2rem);
+  width: min(92cqw, 1100px);
+  padding: clamp(1.5rem, 5cqmin, 4rem) clamp(1.25rem, 4cqmin, 3.5rem);
+  border-radius: clamp(1.25rem, 4cqmin, 3rem);
+  background: #17120f;
+  box-shadow: 0 1.5cqmin 5cqmin rgba(59, 42, 23, 0.35);
+  font-family: var(--font-family);
+  line-height: 1.2;
+  animation: nr-lose-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+.nr-lose-icon {
+  width: clamp(3rem, 9cqmin, 7rem);
+  height: auto;
+  color: #e6b85c;
+}
+
+.nr-lose-title {
+  margin: 0;
+  color: #f2cf82;
+  font-size: clamp(1.75rem, 6cqmin, 5rem);
+  font-weight: 700;
+}
+
+.nr-lose-text {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.25rem, 4.2cqmin, 3.5rem);
+}
+
+.nr-lose-cta {
+  margin: 0;
+  color: #e6b85c;
+  font-size: clamp(1.25rem, 4.2cqmin, 3.5rem);
+  font-weight: 600;
+}
+
+@keyframes nr-lose-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nr-lose-card {
+    animation: none;
+  }
+}

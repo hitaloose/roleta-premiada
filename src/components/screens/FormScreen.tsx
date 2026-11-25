@@ -7,10 +7,10 @@ type FormScreenProps = {
 };
 
 // O KioskLayout centraliza na vertical; a margem de baixo sobe o formulário
-// para ~40% da altura, na altura dos olhos com a TV de pé.
+// para o terço de cima da tela, na altura dos olhos com a TV de pé.
 export function FormScreen({ isCpfUsed, addEntry }: FormScreenProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20cqh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '50cqh' }}>
       <h2
         className="font-display"
         style={{

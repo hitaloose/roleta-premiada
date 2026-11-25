@@ -3,10 +3,12 @@ import { useMachineDispatch, useMachineState } from '../../state/MachineContext'
 import { useAutoTimeout } from '../../hooks/useAutoTimeout';
 import { TIMEOUTS } from '../../config/timing';
 import { playResult } from '../../audio/sounds';
+import { useConfig } from '../../state/ConfigContext';
 
 export function ResultLoseScreen() {
   const state = useMachineState();
   const dispatch = useMachineDispatch();
+  const { brand } = useConfig();
 
   useAutoTimeout(true, TIMEOUTS.LOSE_MESSAGE_DURATION_MS, () => dispatch({ type: 'ACK_RESULT' }));
 
@@ -15,6 +17,8 @@ export function ResultLoseScreen() {
   }, []);
 
   if (state.status !== 'result-lose') return null;
+
+  if (brand.LoseScreen) return <brand.LoseScreen />;
 
   return (
     <>

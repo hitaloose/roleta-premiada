@@ -23,6 +23,8 @@ export type Brand = {
     titleSize?: string;
   };
   Background: ComponentType;
+  /** Tela própria de "não ganhou". Sem ela, mostra uma das `loseMessages` sorteada. */
+  LoseScreen?: ComponentType;
   prizes: Prize[];
   loseMessages: string[];
 };

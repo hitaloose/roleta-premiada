@@ -2,6 +2,7 @@ import type { Brand } from '../types';
 import { publicAsset } from '../publicAsset';
 import { ArabesqueBackground } from './ArabesqueBackground';
 import { LOSE_MESSAGES } from './loseMessages';
+import { LoseCard } from './LoseCard';
 import { PRIZES } from './prizes';
 // Fontes empacotadas no build (sem Google Fonts): a roleta abre offline.
 import '@fontsource/rakkas/400.css';
@@ -13,6 +14,7 @@ export const notasRaras: Brand = {
   logo: { src: publicAsset('logo.webp'), width: '120px' },
   confettiColors: ['#D4AF37', '#F7EFE0', '#C0392B', '#8A9A5B'],
   Background: ArabesqueBackground,
+  LoseScreen: LoseCard,
   prizes: PRIZES,
   loseMessages: LOSE_MESSAGES,
 };
