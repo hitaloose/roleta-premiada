@@ -259,44 +259,14 @@ export function playSuperWin(ctx: AudioContext, out: AudioNode) {
   }
 }
 
-/** Falha: "uó-uó-uó-uóóó" de trombone descendo. */
+/** Dois toques suaves ("dim-dom"), sem cara de derrota: só marca o fim do giro. */
 export function playLose(ctx: AudioContext, out: AudioNode) {
   const t = ctx.currentTime + 0.02;
-  const notes: [number, number, number][] = [
-    [392, 0, 0.35],
-    [370, 0.4, 0.35],
-    [349.2, 0.8, 0.35],
-    [329.6, 1.2, 1.0],
-  ];
-  for (const [f, start, len] of notes) {
-    const at = t + start;
-    const osc = ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(f, at);
-    osc.frequency.linearRampToValueAtTime(f * 0.97, at + len);
-    if (len > 0.5) {
-      const vib = ctx.createOscillator();
-      vib.frequency.value = 6;
-      const depth = ctx.createGain();
-      depth.gain.value = f * 0.02;
-      vib.connect(depth).connect(osc.frequency);
-      vib.start(at + 0.15);
-      vib.stop(at + len);
-    }
-    // "wah": o filtro abre e fecha em cada nota
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.Q.value = 6;
-    filter.frequency.setValueAtTime(300, at);
-    filter.frequency.exponentialRampToValueAtTime(1400, at + 0.12);
-    filter.frequency.exponentialRampToValueAtTime(350, at + len);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, at);
-    g.gain.exponentialRampToValueAtTime(0.3, at + 0.04);
-    g.gain.setValueAtTime(0.3, at + len - 0.1);
-    g.gain.exponentialRampToValueAtTime(0.0001, at + len);
-    osc.connect(filter).connect(g).connect(out);
-    osc.start(at);
-    osc.stop(at + len + 0.05);
-  }
+  [
+    [523.3, 0], // C5
+    [392.0, 0.22], // G4
+  ].forEach(([f, start]) => {
+    tone(ctx, out, { type: 'sine', freq: f, at: t + start, peak: 0.28, decay: 0.7, attack: 0.01 });
+    tone(ctx, out, { type: 'triangle', freq: f * 2, at: t + start, peak: 0.04, decay: 0.3, attack: 0.01 });
+  });
 }
